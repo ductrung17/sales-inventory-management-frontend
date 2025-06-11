@@ -6,14 +6,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export const ProductList = () => {
-  const navigate = useNavigate();
-
   const [products, setProducts] = useState([]);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const search = params.get("search");
+
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
@@ -40,7 +40,6 @@ export const ProductList = () => {
     }
   };
 
-  // Xóa sản phẩm
   const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
       try {
@@ -59,9 +58,23 @@ export const ProductList = () => {
     }
   };
 
-  // Chuyển sang trang sửa
   const handleEdit = (id) => {
     navigate(`/edit-product/${id}`);
+  };
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      navigate("/products");
+    }
   };
 
   return (
@@ -78,45 +91,64 @@ export const ProductList = () => {
         {/* Main content */}
         <main className="mt-20 w-full px-4 lg:ml-0 lg:mt-20 lg:w-4/5 lg:px-8">
           <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-            <h2 className="text-xl font-semibold text-gray-700 md:text-2xl">
+            <h2 className="text-xl font-semibold text-gray-700 md:text-3xl">
               Danh sách sản phẩm
             </h2>
-
-            <a
-              href="/create-product"
-              className="rounded-full bg-green-100 p-3 hover:bg-green-200"
-            >
-              <FaPlus size={20} />
-            </a>
+            <div className="flex space-x-4">
+              <form
+                onSubmit={handleSearchSubmit}
+                className="flex items-center justify-start space-x-2"
+              >
+                <input
+                  type="text"
+                  placeholder="Tìm sản phẩm..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="rounded border px-2 py-1"
+                />
+                <button
+                  type="submit"
+                  className="rounded bg-green-500 px-3 py-1 text-white hover:bg-green-600"
+                >
+                  Tìm
+                </button>
+              </form>
+              <a
+                href="/create-product"
+                className="flex justify-center rounded-full bg-green-500 p-3 hover:bg-green-600"
+              >
+                <FaPlus size={20} className="text-white" />
+              </a>
+            </div>
           </div>
 
           <div className="w-full overflow-x-auto rounded-lg shadow-md">
-            <table className="min-w-full table-auto text-left text-xs md:text-sm">
+            <table className="w-full min-w-[800px] table-auto text-center text-xs text-gray-700 md:text-sm">
               <thead className="bg-gray-200 uppercase text-gray-700">
                 <tr>
-                  <th className="px-8 py-4">STT</th>
-                  <th className="px-24 py-4">Ảnh minh họa</th>
-                  <th className="px-8 py-4">Tên sản phẩm</th>
-                  <th className="px-2 py-4">Mô tả</th>
-                  <th className="px-8 py-4">Tồn kho</th>
-                  <th className="px-8 py-4">Thao tác</th>
+                  <th className="px-4 py-4">STT</th>
+                  <th className="px-2 py-4">Ảnh minh họa</th>
+                  <th className="px-2 py-4">Tên sản phẩm</th>
+                  <th className="py-4 pl-2">Mô tả</th>
+                  <th className="px-2 py-4">Tồn kho</th>
+                  <th className="px-2 py-4">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y-2 bg-white font-normal text-black">
                 {products.map((product, index) => (
                   <tr key={product._id}>
-                    <td className="px-8 py-4">{index + 1}</td>
-                    <td className="px-1 py-4">
+                    <td className="px-4 py-4">{index + 1}</td>
+                    <td className="py-4">
                       <img
                         src={`${apiUrl}${product.image}`}
                         alt={product.name}
-                        className="mx-auto w-full max-w-[200px] rounded-md object-cover"
+                        className="mx-auto w-full max-w-[150px] rounded-md object-cover"
                       />
                     </td>
-                    <td className="px-8 py-4">{product.name}</td>
-                    <td className="px-2 py-4">{product.description}</td>
-                    <td className="px-8 py-4">{product.stock}</td>
-                    <td className="space-x-2 px-8 py-4">
+                    <td className="px-2 py-4">{product.name}</td>
+                    <td className="py-4 pl-2">{product.description}</td>
+                    <td className="px-2 py-4">{product.stock}</td>
+                    <td className="space-x-2 px-2 py-4">
                       <button onClick={() => handleEdit(product._id)}>
                         <FaEdit size={11} />
                       </button>
@@ -133,7 +165,7 @@ export const ProductList = () => {
       </div>
       {/* <footer className="mt-12 w-full bg-gray-100 px-6 py-8 text-sm text-gray-600">
         <div className="mx-auto flex max-w-screen-xl flex-col items-center justify-between gap-6 md:flex-row">
-          <div className="text-center md:text-left">
+          <div className="md:text-left">
             <p className="font-semibold text-gray-700">
               © 2025 Quản lý Kho hàng
             </p>

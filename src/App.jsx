@@ -8,6 +8,8 @@ import { ProductList } from "./pages/ProductList";
 import { CreateProduct } from "./pages/CreateProduct";
 import { EditProduct } from "./pages/EditProduct";
 import { Inventory } from "./pages/Inventory";
+import { AddOrder } from "./pages/AddOrder";
+import { OrderList } from "./pages/OrderList";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +25,8 @@ function App() {
         <Route path="/create-product" element={<CreateProduct />} />
         <Route path="/edit-product/:id" element={<EditProduct />} />
         <Route path="/inventory" element={<Inventory />} />
+        <Route path="/add-order" element={<AddOrder />} />
+        <Route path="/orders" element={<OrderList />} />
       </Routes>
     </Router>
   );

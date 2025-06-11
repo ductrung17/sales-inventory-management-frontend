@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { FaBox, FaWarehouse, FaChartBar, FaBars } from "react-icons/fa";
+import {
+  FaBox,
+  FaWarehouse,
+  FaChartBar,
+  FaBars,
+  FaClipboardList,
+} from "react-icons/fa";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -38,6 +44,13 @@ export const Sidebar = () => {
           >
             <FaWarehouse size={16} className="me-4" />
             Kho hàng
+          </a>
+          <a
+            href="/orders"
+            className="ml-2 flex items-center py-2 text-sm font-medium text-gray-700 hover:text-black"
+          >
+            <FaClipboardList size={16} className="me-4" />
+            Đơn hàng
           </a>
           <a
             href="#"

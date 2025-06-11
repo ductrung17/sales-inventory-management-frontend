@@ -1,25 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
     alert("Bạn đã đăng xuất!");
     navigate("/login");
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
-    }
   };
 
   return (
@@ -31,37 +21,37 @@ export const Header = () => {
 
       {/* Các nút bên phải */}
       <div className="ml-auto flex items-center space-x-4">
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex items-center space-x-2"
-        >
-          <input
-            type="text"
-            placeholder="Tìm sản phẩm..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="rounded border px-2 py-1"
-          />
+        <div className="relative inline-block text-left">
           <button
-            type="submit"
-            className="rounded bg-green-500 px-3 py-1 text-white hover:bg-green-600"
+            onClick={() => setOpen(!open)}
+            className="flex items-center justify-center text-3xl leading-none text-gray-600 hover:text-black"
           >
-            Tìm
+            <FaUserCircle />
           </button>
-        </form>
 
-        <button
-          onClick={() => navigate("/profile")}
-          className="text-sm font-medium text-gray-600 hover:text-black"
-        >
-          Hồ sơ cá nhân
-        </button>
-        <button
-          onClick={handleLogout}
-          className="text-sm font-medium text-gray-600 hover:text-black"
-        >
-          Đăng xuất
-        </button>
+          {open && (
+            <div className="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg">
+              <button
+                onClick={() => {
+                  navigate("/profile");
+                  setOpen(false);
+                }}
+                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Hồ sơ cá nhân
+              </button>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setOpen(false);
+                }}
+                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Đăng xuất
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
