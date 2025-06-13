@@ -10,6 +10,8 @@ import { EditProduct } from "./pages/EditProduct";
 import { Inventory } from "./pages/Inventory";
 import { AddOrder } from "./pages/AddOrder";
 import { OrderList } from "./pages/OrderList";
+import { PaymentList } from "./pages/PaymentList";
+import { CreatePayment } from "./pages/CreatePayment";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -27,6 +29,8 @@ function App() {
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/add-order" element={<AddOrder />} />
         <Route path="/orders" element={<OrderList />} />
+        <Route path="/payments" element={<PaymentList />} />
+        <Route path="/create-payment" element={<CreatePayment />} />
       </Routes>
     </Router>
   );

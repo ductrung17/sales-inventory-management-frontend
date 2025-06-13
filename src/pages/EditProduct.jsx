@@ -49,16 +49,6 @@ export const EditProduct = () => {
     fetchProduct();
   }, [id]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.put(`${apiUrl}/api/products/${id}`, form);
-  //     alert("Cập nhật sản phẩm thành công!");
-  //     navigate("/products");
-  //   } catch (err) {
-  //     alert("Lỗi khi cập nhật sản phẩm");
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 

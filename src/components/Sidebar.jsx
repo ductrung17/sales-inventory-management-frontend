@@ -5,6 +5,7 @@ import {
   FaChartBar,
   FaBars,
   FaClipboardList,
+  FaMoneyCheckAlt,
 } from "react-icons/fa";
 
 export const Sidebar = () => {
@@ -51,6 +52,13 @@ export const Sidebar = () => {
           >
             <FaClipboardList size={16} className="me-4" />
             Đơn hàng
+          </a>
+          <a
+            href="/payments"
+            className="ml-2 flex items-center py-2 text-sm font-medium text-gray-700 hover:text-black"
+          >
+            <FaMoneyCheckAlt size={16} className="me-4" />
+            Thanh toán
           </a>
           <a
             href="#"

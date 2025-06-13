@@ -24,7 +24,7 @@ export const Header = () => {
         <div className="relative inline-block text-left">
           <button
             onClick={() => setOpen(!open)}
-            className="flex items-center justify-center text-3xl leading-none text-gray-600 hover:text-black"
+            className="flex items-center justify-center pr-4 text-3xl leading-none text-gray-600 hover:text-black"
           >
             <FaUserCircle />
           </button>

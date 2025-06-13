@@ -20,13 +20,14 @@ export const OrderList = () => {
     }
 
     fetchOrders();
-  }, [navigate, search]);
+  }, [navigate, search, location.search]);
 
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
+      const query = search ? `?search=${search}` : "";
 
-      const res = await axios.get(`${apiUrl}/api/orders`, {
+      const res = await axios.get(`${apiUrl}/api/orders${query}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,20 +35,53 @@ export const OrderList = () => {
 
       setOrders(res.data);
     } catch (err) {
-      console.error("Lỗi khi tải danh sách sản phẩm:", err.message);
+      console.error("Lỗi khi tải danh sách đơn hàng:", err.message);
     }
   };
 
-  const ORDER_STATUSES = ["Đang xử lý", "Hoàn thành", "Đã hủy"];
-  const DELIVERY_STATUSES = [
-    "Đang xử lý",
-    "Đã gửi hàng",
-    "Giao thành công",
-    "Trả hàng",
-  ];
+  const [statuses, setStatuses] = useState([]);
+  const [deliveryStatuses, setDeliveryStatuses] = useState([]);
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/api/statuses`);
+        setStatuses(res.data);
+      } catch (err) {
+        console.error("Lỗi khi tải danh sách trạng thái:", err);
+      }
+    };
+
+    const fetchDeliveryStatuses = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/api/delivery-statuses`);
+        setDeliveryStatuses(res.data);
+      } catch (err) {
+        console.error("Lỗi khi tải delivery statuses:", err);
+      }
+    };
+
+    fetchStatuses();
+    fetchDeliveryStatuses();
+  }, []);
+
+  const deliveryToStatusMap = {
+    "Giao thành công": "Đã hoàn thành",
+    "Trả hàng": "Đã hủy",
+    "Đang xử lý": "Đang xử lý",
+    "Đã gửi hàng": "Đang xử lý",
+  };
+
   const handleStatusChange = async (orderId, newValue, field) => {
     try {
       const token = localStorage.getItem("jwtToken");
+
+      const updatePayload = {
+        [field]: newValue,
+      };
+
+      if (field === "deliveryStatus" && deliveryToStatusMap[newValue]) {
+        updatePayload.status = deliveryToStatusMap[newValue];
+      }
       await axios.put(`${apiUrl}/api/orders/${orderId}`, updatePayload, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -62,17 +96,15 @@ export const OrderList = () => {
   };
 
   const [searchOrder, setSearchOrder] = useState("");
-
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchOrder(e.target.value);
   };
-
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+    if (searchOrder.trim()) {
+      navigate(`/orders?search=${encodeURIComponent(searchOrder.trim())}`);
     } else {
-      navigate("/products");
+      navigate("/orders");
     }
   };
 
@@ -91,7 +123,7 @@ export const OrderList = () => {
         <main className="mt-20 w-full px-4 lg:px-8">
           <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <h2 className="text-xl font-semibold text-gray-700 md:text-3xl">
-              Danh sách sản phẩm
+              Danh sách đơn hàng
             </h2>
             <div className="flex space-x-4">
               <form
@@ -113,7 +145,7 @@ export const OrderList = () => {
                 </button>
               </form>
               <a
-                href="/create-product"
+                href="/add-order"
                 className="flex justify-center rounded-full bg-green-500 p-3 hover:bg-green-600"
               >
                 <FaPlus size={20} className="text-white" />
@@ -131,7 +163,8 @@ export const OrderList = () => {
                   <th className="px-4 py-4">Tổng tiền</th>
                   <th className="px-4 py-4">Ngày đặt</th>
                   <th className="px-4 py-4">Hạn giao</th>
-                  <th className="px-4 py-4">Trạng thái đơn</th>
+                  <th className="px-4 py-4">Giao hàng</th>
+                  <th className="px-4 py-4">Trạng thái</th>
                 </tr>
               </thead>
               <tbody className="divide-y-2 bg-white font-normal text-black">
@@ -159,6 +192,10 @@ export const OrderList = () => {
                     <td className="px-4 py-4">
                       <select
                         value={order.deliveryStatus}
+                        disabled={
+                          order.deliveryStatus === "Giao thành công" ||
+                          order.deliveryStatus === "Trả hàng"
+                        }
                         onChange={(e) =>
                           handleStatusChange(
                             order._id,
@@ -168,7 +205,30 @@ export const OrderList = () => {
                         }
                         className="rounded border px-2 py-1"
                       >
-                        {DELIVERY_STATUSES.map((status) => (
+                        {deliveryStatuses.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="px-4 py-4">
+                      <select
+                        value={order.status}
+                        disabled={
+                          order.status === "Đã hoàn thành" ||
+                          order.status === "Đã hủy"
+                        }
+                        onChange={(e) =>
+                          handleStatusChange(
+                            order._id,
+                            e.target.value,
+                            "status",
+                          )
+                        }
+                        className="rounded border px-2 py-1"
+                      >
+                        {statuses.map((status) => (
                           <option key={status} value={status}>
                             {status}
                           </option>

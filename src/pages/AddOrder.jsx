@@ -5,6 +5,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export const AddOrder = () => {
+  // const getFiveDaysLater = () => {
+  //   const today = new Date();
+  //   today.setDate(today.getDate() + 5);
+  //   return today.toISOString().split("T")[0];
+  // };
+
   const [form, setForm] = useState({
     orderNumber: "",
     customerName: "",
@@ -46,7 +52,7 @@ export const AddOrder = () => {
 
       setProducts(res.data);
     } catch (err) {
-      console.error("Lỗi khi tải danh sách sản phẩm:", err.message);
+      console.error("Lỗi khi tải danh sách đơn hàng:", err.message);
     }
   };
 
@@ -108,10 +114,11 @@ export const AddOrder = () => {
       .post(`${apiUrl}/api/orders`, form)
       .then(() => alert("Tạo đơn hàng thành công"))
       .catch((err) => alert("Lỗi khi tạo đơn hàng"));
+    navigate(`/orders?refresh=${Date.now()}`);
   };
 
   const generateOrderNumber = () => {
-    return `ORD-${Date.now()}`;
+    return `${Date.now()}`;
   };
 
   const [orderNumber, setOrderNumber] = useState("");
@@ -136,12 +143,20 @@ export const AddOrder = () => {
   };
   useEffect(() => {
     const newOrderNumber = generateOrderNumber();
+
+    const today = new Date();
+    today.setDate(today.getDate() + 5);
+    const fiveDaysLater = today.toISOString().split("T")[0];
+
     setOrderNumber(newOrderNumber);
     setForm((prev) => ({
       ...prev,
       orderNumber: newOrderNumber,
+      deliveryDeadline: fiveDaysLater,
     }));
   }, []);
+
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="min-h-screen sm:ml-0 md:ml-32">
@@ -157,15 +172,19 @@ export const AddOrder = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6 text-left">
               {/* Mã đơn hàng */}
-              <input
-                name="orderNumber"
-                required
-                value={orderNumber}
-                onChange={(e) => setOrderNumber(e.target.value)}
-                className="mt-1 w-full rounded-md border border-gray-400 px-4 py-2"
-                placeholder="Mã đơn hàng"
-              />
-
+              <div>
+                <label className="font-medium text-gray-800">
+                  Mã đơn hàng:
+                </label>
+                <input
+                  name="orderNumber"
+                  required
+                  value={orderNumber}
+                  onChange={(e) => setOrderNumber(e.target.value)}
+                  className="mt-1 w-full rounded-md border border-gray-400 px-4 py-2"
+                  placeholder="Mã đơn hàng"
+                />
+              </div>
               {/* Tên khách hàng */}
               <div>
                 <label className="font-medium text-gray-800">
@@ -192,6 +211,7 @@ export const AddOrder = () => {
                   name="deliveryDeadline"
                   value={form.deliveryDeadline}
                   onChange={handleChange}
+                  min={today}
                   className="mt-1 w-full rounded-md border border-gray-400 px-4 py-2"
                 />
               </div>
@@ -251,15 +271,18 @@ export const AddOrder = () => {
                     type="number"
                     placeholder="Số lượng"
                     value={selectedQuantity}
-                    onChange={(e) =>
-                      setSelectedQuantity(Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (value >= 1) {
+                        setSelectedQuantity(value);
+                      }
+                    }}
                     className="rounded border px-3 py-2"
                   />
                   <button
                     type="button"
                     onClick={handleAddItem}
-                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                    className="rounded bg-gray-800 px-4 py-2 text-white hover:bg-black"
                   >
                     + Thêm sản phẩm
                   </button>
