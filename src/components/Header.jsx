@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 
 export const Header = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const token = localStorage.getItem("jwtToken");
+  const decoded = jwtDecode(token);
+  const userId = decoded.userId;
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
@@ -33,7 +37,7 @@ export const Header = () => {
             <div className="absolute right-0 z-10 mt-2 w-40 rounded-md border bg-white shadow-lg">
               <button
                 onClick={() => {
-                  navigate("/profile");
+                  navigate(`/profile/${userId}`);
                   setOpen(false);
                 }}
                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
