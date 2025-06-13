@@ -31,7 +31,9 @@ export const RevenueReport = () => {
 
       setReport(res.data);
     } catch (err) {
-      console.error("Lỗi khi lấy báo cáo:", err.message);
+      const message =
+        err.response?.data?.message || "Lỗi không xác định khi lấy báo cáo";
+      alert(`${message}`);
     } finally {
     }
   };
@@ -124,7 +126,7 @@ export const RevenueReport = () => {
                     <th className="px-2 py-3">Mã đơn</th>
                     <th className="px-2 py-3">Khách hàng</th>
                     <th className="px-2 py-3">Số tiền</th>
-                    <th className="px-2 py-3">Ngày thanh toán</th>
+                    <th className="px-2 py-3">Ngày đặt</th>
                     <th className="px-2 py-3">Phương thức</th>
                   </tr>
                 </thead>

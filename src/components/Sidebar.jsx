@@ -7,6 +7,7 @@ import {
   FaClipboardList,
   FaMoneyCheckAlt,
   FaHome,
+  FaUserAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -43,6 +44,13 @@ export const Sidebar = () => {
           >
             <FaHome size={16} className="me-4" />
             Trang chủ
+          </a>
+          <a
+            href="/users"
+            className="ml-2 flex items-center py-2 text-sm font-medium text-gray-700 hover:text-black"
+          >
+            <FaUserAlt size={16} className="me-4" />
+            Nhân sự
           </a>
           <a
             href="/products"

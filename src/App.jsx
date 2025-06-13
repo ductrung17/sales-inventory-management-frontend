@@ -13,6 +13,7 @@ import { OrderList } from "./pages/OrderList";
 import { PaymentList } from "./pages/PaymentList";
 import { CreatePayment } from "./pages/CreatePayment";
 import { RevenueReport } from "./pages/RevenueReport";
+import { UserList } from "./pages/UserList";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/payments" element={<PaymentList />} />
         <Route path="/create-payment" element={<CreatePayment />} />
         <Route path="/revenue-report" element={<RevenueReport />} />
+        <Route path="/users" element={<UserList />} />
       </Routes>
     </Router>
   );
