@@ -12,6 +12,7 @@ import { AddOrder } from "./pages/AddOrder";
 import { OrderList } from "./pages/OrderList";
 import { PaymentList } from "./pages/PaymentList";
 import { CreatePayment } from "./pages/CreatePayment";
+import { RevenueReport } from "./pages/RevenueReport";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -31,6 +32,7 @@ function App() {
         <Route path="/orders" element={<OrderList />} />
         <Route path="/payments" element={<PaymentList />} />
         <Route path="/create-payment" element={<CreatePayment />} />
+        <Route path="/revenue-report" element={<RevenueReport />} />
       </Routes>
     </Router>
   );

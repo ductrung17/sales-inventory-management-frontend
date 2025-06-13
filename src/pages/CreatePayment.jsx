@@ -175,7 +175,7 @@ export const CreatePayment = () => {
                   type="submit"
                   className="rounded bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700"
                 >
-                  Xác nhận thanh toán
+                  Lưu
                 </button>
               </div>
             </form>
