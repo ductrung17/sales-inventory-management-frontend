@@ -1,12 +1,45 @@
-# React + Vite
+# 🖥️ Frontend - Sales & Inventory Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Giao diện quản trị người dùng, sản phẩm, đơn hàng và thống kê cho hệ thống quản lý bán hàng & kho.
 
-Currently, two official plugins are available:
+## 🚀 Công nghệ sử dụng
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ReactJS
+- TailwindCSS
+- React Router DOM
+- Axios
+- React Hook Form
+- React Table
+- Recharts
 
-## Expanding the ESLint configuration
+## ▶️ Khởi chạy dự án
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+Frontend sẽ chạy tại:  
+👉 http://localhost:5173
+
+> Lưu ý: Đảm bảo backend đã chạy trước để frontend có thể kết nối API thành công.
+
+## 📚 Các chức năng chính
+
+- Đăng nhập & xác thực
+- Trang chủ tổng quan
+- Quản lý sản phẩm
+- Quản lý đơn hàng
+- Quản lý người dùng
+- Thống kê doanh thu
+- In & xem hóa đơn
+
+## 🔗 Cấu trúc thư mục
+
+```
+src/
+├── api/             # Gọi API bằng Axios
+├── components/      # Header, Sidebar, Layout
+├── pages/           # Các trang: Login, Products, Orders, etc.
+└── App.jsx
+```
