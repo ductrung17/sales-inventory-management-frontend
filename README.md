@@ -32,7 +32,6 @@ Frontend sẽ chạy tại:
 - Quản lý đơn hàng
 - Quản lý người dùng
 - Thống kê doanh thu
-- In & xem hóa đơn
 
 ## 🔗 Cấu trúc thư mục
 
